@@ -5,7 +5,7 @@ let gameBoard = (() => {
 
   let boxes = document.querySelectorAll(".box");
 
-  let mark = "X"
+  let mark = "X";
 
   let displayBoard = function() {
     let boardIndex = 0;
@@ -29,20 +29,20 @@ let gameBoard = (() => {
       storeMark(e.target.dataset.index);
       displayBoard();
       changeMark();
-    })
-  })
+    });
+  });
 
   let storeMark = (boxIndex) => {
     board[boxIndex] = mark;
-  }
+  };
 
   let changeMark = () => {
     if (mark == "X") {
       mark = "O";
     } else {
       mark = "X";
-    }
-  }
+    };
+  };
 
   return{board, displayBoard};
 
@@ -70,7 +70,7 @@ let game = (() => {
     player2 = secondPlayer;
     currentPlayer = player1;
     currentPlayer.displayName();
-  }
+  };
 
   let updatePlayer = () => {
     if (currentPlayer == player1) {
@@ -79,13 +79,23 @@ let game = (() => {
     } else {
       currentPlayer = player1;
       currentPlayer.displayName();
-    }
-  }
+    };
+  };
 
   let displayWinner = function(player) {
     let winner = player.name;
-    alert(`The winner is ${winner}`);
+    let modal = document.querySelector(".modal");
+    let modalWinnerName = document.querySelector(".modal-player");
+    modalWinnerName = winner;
+    modal.style.display = "block";
   };
+
+  window.addEventListener("click", (e) => {
+    let modal = document.querySelector(".modal");
+    if(e.target == modal) {
+      modal.style.display = "none"
+    };
+  });
 
   let checkWinner = function(board) {
 
@@ -129,8 +139,8 @@ let game = (() => {
     box.addEventListener("click", () => {
       checkWinner(gameBoard.board);
       updatePlayer();
-    })
-  })
+    });
+  });
 
   let newGameBtn = document.querySelector(".start-game");
   newGameBtn.addEventListener("click", () => {
