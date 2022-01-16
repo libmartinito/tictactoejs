@@ -29,15 +29,19 @@ let gameBoard = (() => {
     box.addEventListener("click", (e) => {
       let currentPlayer = document.querySelector(".current-player");
       if (currentPlayer.textContent != "Current Player:") {
-        storeMark(e.target.dataset.index);
-        displayBoard();
-        changeMark();
-      }
+        if (e.target.textContent == "") {
+          storeMark(e.target.dataset.index);
+          displayBoard();
+          changeMark();
+        };
+      };
     });
   });
 
   let storeMark = (boxIndex) => {
-    board[boxIndex] = mark;
+    if (board[boxIndex] == "") {
+      board[boxIndex] = mark;
+    };
   };
 
   let changeMark = () => {
@@ -48,7 +52,7 @@ let gameBoard = (() => {
     };
   };
 
-  return{board, displayBoard};
+  return{board, displayBoard, clearBoard};
 
 })();
 
@@ -71,6 +75,7 @@ let game = (() => {
   let player1 = "";
   let player2 = "";
   let currentPlayer = "";
+  let winner = "";
 
   let play = (firstPlayer, secondPlayer) => {
     player1 = firstPlayer;
@@ -79,21 +84,34 @@ let game = (() => {
     currentPlayer.displayName();
   };
 
+  let prevBoardMarkCount = 0;
+  let curBoardMarkCount = 0;
+
+  let updateBoardMarkCount = () => {
+    prevBoardMarkCount = curBoardMarkCount;
+    curBoardMarkCount = gameBoard.board.filter(item => item != "").length;
+    console.log(prevBoardMarkCount);
+    console.log(curBoardMarkCount);
+  };
+
   let updatePlayer = () => {
-    if (currentPlayer == player1) {
-      currentPlayer = player2;
-      currentPlayer.displayName();
-    } else {
-      currentPlayer = player1;
-      currentPlayer.displayName();
+    if (curBoardMarkCount > prevBoardMarkCount) {
+      if (currentPlayer == player1) {
+        currentPlayer = player2;
+        currentPlayer.displayName();
+      } else {
+        currentPlayer = player1;
+        currentPlayer.displayName();
+      };
     };
   };
 
   let displayWinner = function(player) {
-    let winner = player.name;
+    winner = player.name;
+    gameBoard.winner = player.name;
     let modal = document.querySelector(".modal");
     let modalWinnerName = document.querySelector(".modal-player");
-    modalWinnerName = winner;
+    modalWinnerName.textContent = winner;
     modal.style.display = "block";
   };
 
@@ -101,6 +119,7 @@ let game = (() => {
     let modal = document.querySelector(".modal");
     if(e.target == modal) {
       modal.style.display = "none"
+      gameBoard.clearBoard();
     };
   });
 
@@ -145,14 +164,16 @@ let game = (() => {
   boxes.forEach(box => {
     box.addEventListener("click", () => {
       if (currentPlayer != "") {
+        updateBoardMarkCount();
         checkWinner(gameBoard.board);
         updatePlayer();
-      }
+      };
     });
   });
 
   let newGameBtn = document.querySelector(".start-game");
   newGameBtn.addEventListener("click", () => {
+    gameBoard.clearBoard();
     play(player("Lib"), player("Joshua"));
   });
 })();
