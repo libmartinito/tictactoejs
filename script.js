@@ -80,8 +80,8 @@ let game = (() => {
   let winner = "";
 
   let play = () => {
-    player1 = player(window.prompt("Please enter name for player one:"));
-    player2 = player(window.prompt("Please enter name for player two:"));
+    player1 = player(window.prompt("Please enter name for player one:", "Player one"));
+    player2 = player(window.prompt("Please enter name for player two:", "Player two"));
     currentPlayer = player1;
     currentPlayer.displayName();
   };
