@@ -23,11 +23,13 @@ let gameBoard = (() => {
     boxes.forEach(box => {
       box.textContent = "";
     });
+    currentPlayer.textContent = "Current Player:";
   };
+
+  let currentPlayer = document.querySelector(".current-player");
 
   boxes.forEach(box => {
     box.addEventListener("click", (e) => {
-      let currentPlayer = document.querySelector(".current-player");
       if (currentPlayer.textContent != "Current Player:") {
         if (e.target.textContent == "") {
           storeMark(e.target.dataset.index);
@@ -77,9 +79,9 @@ let game = (() => {
   let currentPlayer = "";
   let winner = "";
 
-  let play = (firstPlayer, secondPlayer) => {
-    player1 = firstPlayer;
-    player2 = secondPlayer;
+  let play = () => {
+    player1 = player(window.prompt("Please enter name for player one:"));
+    player2 = player(window.prompt("Please enter name for player two:"));
     currentPlayer = player1;
     currentPlayer.displayName();
   };
@@ -90,8 +92,6 @@ let game = (() => {
   let updateBoardMarkCount = () => {
     prevBoardMarkCount = curBoardMarkCount;
     curBoardMarkCount = gameBoard.board.filter(item => item != "").length;
-    console.log(prevBoardMarkCount);
-    console.log(curBoardMarkCount);
   };
 
   let updatePlayer = () => {
@@ -174,7 +174,7 @@ let game = (() => {
   let newGameBtn = document.querySelector(".start-game");
   newGameBtn.addEventListener("click", () => {
     gameBoard.clearBoard();
-    play(player("Lib"), player("Joshua"));
+    play();
   });
 })();
 
