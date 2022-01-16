@@ -1,4 +1,5 @@
-// A gameboard object
+// A gameboard module
+
 let gameBoard = (() => {
 
   let board = ["","","","","","","","",""];
@@ -26,9 +27,12 @@ let gameBoard = (() => {
 
   boxes.forEach(box => {
     box.addEventListener("click", (e) => {
-      storeMark(e.target.dataset.index);
-      displayBoard();
-      changeMark();
+      let currentPlayer = document.querySelector(".current-player");
+      if (currentPlayer.textContent != "Current Player:") {
+        storeMark(e.target.dataset.index);
+        displayBoard();
+        changeMark();
+      }
     });
   });
 
@@ -48,7 +52,8 @@ let gameBoard = (() => {
 
 })();
 
-// A player object
+// A player factory function
+
 let player = (playerName) => {
   let name = playerName;
 
@@ -59,6 +64,8 @@ let player = (playerName) => {
 
   return{name, displayName};
 };
+
+// A game module
 
 let game = (() => {
   let player1 = "";
@@ -137,8 +144,10 @@ let game = (() => {
   let boxes = document.querySelectorAll(".box");
   boxes.forEach(box => {
     box.addEventListener("click", () => {
-      checkWinner(gameBoard.board);
-      updatePlayer();
+      if (currentPlayer != "") {
+        checkWinner(gameBoard.board);
+        updatePlayer();
+      }
     });
   });
 
